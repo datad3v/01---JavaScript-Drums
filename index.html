@@ -57,6 +57,19 @@
         <img data-key="76" src="images/llama.jpeg" alt="Llama image" style="display: none;"/>
         
         <script>
+            function displayImage(e) {
+                const img = document.querySelector('img[data-key="${e.keyCode}"]');
+                const key = document.querySelector('div[data-key="${e.keyCode}"]');
+                if (!img) return; 
+                    key.classList.add('playing');
+                    img.currentTime = 0;
+                    //img.play();
+                    img.style.display = 'true';
+                // this will append the image to the div image tag
+                
+            }
+
+            window.addEventListener('keydown', displayImage); //unfinished bit
         
         </script>
 
