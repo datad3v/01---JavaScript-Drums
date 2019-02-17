@@ -1,64 +1,95 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>JS Img Kit</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-        <div class="keys">
-            <div data-key="65" class="key">
-                <kbd>A</kbd>
-                <span class="img">Alligator</span>
-            </div>
-            <div data-key="83" class="key">
-                <kbd>S</kbd>
-                <span class="img">Sheep</span>
-            </div>
-            <div data-key="68" class="key">
-                <kbd>D</kbd>
-                <span class="img">Dog</span>
-            </div>
-            <div data-key="70" class="key">
-                <kbd>F</kbd>
-                <span class="img">Frog</span>
-            </div>
-            <div data-key="71" class="key">
-                <kbd>G</kbd>
-                <span class="img">Gecko</span>
-            </div>
-            <div data-key="72" class="key">
-                <kbd>H</kbd>
-                <span class="img">Hamster</span>
-            </div>
-            <div data-key="74" class="key">
-                <kbd>J</kbd>
-                <span class="img">Jellyfish</span>
-            </div>
-            <div data-key="75" class="key">
-                <kbd>K</kbd>
-                <span class="img">Kangaroo</span>
-            </div>
-            <div data-key="76" class="key">
-                <kbd>L</kbd>
-                <span class="img">Llama</span>
-            </div>
-        </div>
 
-        <img data-key="65" src="images/alligator.jpeg" alt="Alligator image" style="display: none;"/>
-        <img data-key="83" src="images/sheep.jpeg" alt="Sheep image" style="display: none;"/>
-        <img data-key="68" src="images/dog.jpeg" alt="Dog image" style="display: none;"/>
-        <img data-key="70" src="images/frog.jpeg" alt="Frog image" style="display: none;"/>
-        <img data-key="71" src="images/gecko.jpeg" alt="Gecko image" style="display: none;"/>
-        <img data-key="72" src="images/hamster.jpg" alt="Hamster image" style="display: none;"/>
-        <img data-key="74" src="images/jellyfish.jpeg" alt="Jellyfish image" style="display: none;"/>
-        <img data-key="75" src="images/Kangaroo.jpeg" alt="Kangaroo image" style="display: none;"/>
-        <img data-key="76" src="images/llama.jpeg" alt="Llama image" style="display: none;"/>
-        
-        <script>
-        
-        </script>
+
+  <div class="keys">
+    <div data-key="65" class="key">
+        <!--Key that should hit on keyboard-->
+      <kbd>A</kbd>
+      <span class="sound">alarm</span>
+    </div>
+    <div data-key="83" class="key">
+      <kbd>S</kbd>
+      <span class="sound">bball</span>
+    </div>
+    <div data-key="68" class="key">
+      <kbd>D</kbd>
+      <span class="sound">billiard</span>
+    </div>
+    <div data-key="70" class="key">
+      <kbd>F</kbd>
+      <span class="sound">canopen</span>
+    </div>
+    <div data-key="71" class="key">
+      <kbd>G</kbd>
+      <span class="sound">clang</span>
+    </div>
+    <div data-key="72" class="key">
+      <kbd>H</kbd>
+      <span class="sound">cowbell</span>
+    </div>
+    <div data-key="74" class="key">
+      <kbd>J</kbd>
+      <span class="sound">door</span>
+    </div>
+    <div data-key="75" class="key">
+      <kbd>K</kbd>
+      <span class="sound">glove</span>
+    </div>
+    <div data-key="76" class="key">
+      <kbd>L</kbd>
+      <span class="sound">woosh</span>
+    </div>
+  </div>
+
+  <!--Corresponding sound data attribute for keyboard key pressed-->
+  <audio data-key="65" src="sounds/alarm.mp3"></audio>
+  <audio data-key="83" src="sounds/basketballRim.mp3"></audio>
+  <audio data-key="68" src="sounds/billiard.mp3"></audio>
+  <audio data-key="70" src="sounds/canOpen.mp3"></audio>
+  <audio data-key="71" src="sounds/clangWobble.mp3"></audio>
+  <audio data-key="72" src="sounds/cowbell.mp3"></audio>
+  <audio data-key="74" src="sounds/doorOpenShut.mp3"></audio>
+  <audio data-key="75" src="sounds/gloveCatch.mp3"></audio>
+  <audio data-key="76" src="sounds/woosh.mp3"></audio>
+
+<script>
+    function playSound(e) {
+        const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+        // select the corresponding div key for what is being pressed
+        const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+
+        if(!audio) return; // if no audio stop the function from running 
+        audio.currentTime = 0; // when same key is hit multiple times - rewinds to start of sound 
+        audio.play();
+        key.classList.add('playing'); // add css playing class to create effect when key is hit
+
+        //console.log(key);
+    }
+
+    function removeTransition(e) {
+        if (e.propertyName !== 'transform') return; // ignore if its not a transform
+        // console.log(this) // what is this - key
+        this.classList.remove('playing');
+    }
+
+    // create a listener to look for transition end event to remove css playing class
+    const keys = document.querySelectorAll('.key');
+    // loop through each key and attach event listener to look for transition end - if true run function
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition)); 
+
+    // first listen for a keyUp event
+    // when this happens run function event
+    window.addEventListener('keydown', playSound);
+
+</script>
+
 
 </body>
 </html>
